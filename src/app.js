@@ -19,6 +19,10 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/meeting", require("./routes/meetingRoutes"));
 app.use("/api/user", require("./routes/userRoutes"));
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
