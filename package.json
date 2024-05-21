@@ -1,0 +1,19 @@
+{
+  "name": "stream-sync",
+  "version": "1.0.0",
+  "description": "a simple streaming app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Furkan Cansever",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "socket.io": "^4.7.5"
+  }
+}
