@@ -36,7 +36,9 @@ io.on('connection', (socket) => {
     socket.broadcast.to(meetingId).emit('userJoined', { userId });
 
     socket.on('sendVideo', (data) => {
+      console.log('Received video data:', data);
       socket.broadcast.to(meetingId).emit('receiveVideo', data);
+      console.log('Sent video data to other users');
     });
 
     socket.on('disconnect', (reason) => {
