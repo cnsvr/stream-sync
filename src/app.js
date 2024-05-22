@@ -4,6 +4,7 @@ const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
 const { Server } = require("socket.io");
+const { ExpressPeerServer } = require('peer');
 
 
 const app = express();
@@ -13,6 +14,13 @@ const io = new Server(server, { cors: { origin: "*" } });
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// PeerJS sunucusunu oluşturma
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+  path: '/peerjs'
+});
+app.use('/peerjs', peerServer);
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
