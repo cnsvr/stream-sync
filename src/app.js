@@ -18,7 +18,6 @@ app.use(cors());
 // PeerJS sunucusunu oluşturma
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  path: '/peerjs'
 });
 app.use('/peerjs', peerServer);
 
