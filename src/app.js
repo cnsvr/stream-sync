@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
-const { ExpressPeerServer } = require('peer');
-
+const { PeerServer } = require("peer");
 
 const app = express();
 const server = http.createServer(app);
@@ -12,13 +11,6 @@ const server = http.createServer(app);
 // Middleware
 app.use(express.json());
 app.use(cors());
-
-// PeerJS sunucusunu oluşturma
-const peerServer = ExpressPeerServer(server, {
-  debug: true,
-  path: '/myapp'
-});
-app.use('/peerjs', peerServer);
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
@@ -45,6 +37,12 @@ mongoose
     const PORT = process.env.PORT || 3001;
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+    });
+
+    // Peer Server
+    const peerServer = PeerServer({ port: 9000, path: "/myapp" });
+    peerServer.on("connection", (client) => {
+      console.log("Client connected", client.getId());
     });
   })
   .catch((err) => console.error("Error connecting to MongoDB:", err.message));
