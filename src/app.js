@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
-const { PeerServer } = require("peer");
+const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
+const io = new Server(server, { cors : { origin: "*" } });
 
 // Middleware
 app.use(express.json());
@@ -39,10 +40,18 @@ mongoose
       console.log(`Server is running on port ${PORT}`);
     });
 
-    // Peer Server
-    const peerServer = PeerServer({ port: 9000, path: "/myapp" });
-    peerServer.on("connection", (client) => {
-      console.log("Client connected", client.getId());
+    io.on("connection", (socket) => {
+      console.log("User connected", socket.id);
+    
+      socket.on('joinMeeting', ({ meetingId, peerId }) => {
+        socket.join(meetingId);
+        socket.to(meetingId).emit('userJoined', { peerId });
+      });
+    
+      socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+      });
     });
+    
   })
   .catch((err) => console.error("Error connecting to MongoDB:", err.message));
