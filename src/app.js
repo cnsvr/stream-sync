@@ -47,6 +47,11 @@ mongoose
         socket.join(meetingId);
         socket.to(meetingId).emit('userJoined', { peerId });
       });
+
+      socket.on('leaveMeeting', ({ meetingId, peerId }) => {
+        socket.to(meetingId).emit('userLeft', { peerId });
+        socket.leave(meetingId);
+      });
     
       socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
