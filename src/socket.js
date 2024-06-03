@@ -17,12 +17,11 @@ function initializeSocket(server) {
       socket.leave(meetingId);
     });
 
-    socket.on('chatMessage', async ({ meetingId, sender, receiver, message }) => {
+    socket.on('chatMessage', async ({ meetingId, sender, message }) => {
       try {
         const chat = new Chat({
           meetingId,
           sender,
-          receiver,
           message
         });
         await chat.save();
