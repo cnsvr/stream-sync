@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
-const { Server } = require('socket.io');
+const initializeSocket = require('./socket');
 
 const app = express();
 const server = http.createServer(app);
@@ -40,23 +40,7 @@ mongoose
       console.log(`Server is running on port ${PORT}`);
     });
 
-    io.on("connection", (socket) => {
-      console.log("User connected", socket.id);
-    
-      socket.on('joinMeeting', ({ meetingId, peerId }) => {
-        socket.join(meetingId);
-        socket.to(meetingId).emit('userJoined', { peerId });
-      });
-
-      socket.on('leaveMeeting', ({ meetingId, peerId }) => {
-        socket.to(meetingId).emit('userLeft', { peerId });
-        socket.leave(meetingId);
-      });
-    
-      socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-      });
-    });
-    
+    // Initialize socket
+    initializeSocket(server);
   })
   .catch((err) => console.error("Error connecting to MongoDB:", err.message));
