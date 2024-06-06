@@ -32,19 +32,19 @@ function initializeSocket(server) {
       }
     });
 
-    socket.on('negotiate', ({ peerId }) => {
+    socket.on('negotiate', ({ peerId, meetingId }) => {
       console.log('Negotiate with:', peerId);
-      io.to(peerId).emit('negotiate', { peerId: socket.id });
+      io.to(meetingId).emit('negotiate', { peerId: socket.id });
     });
 
-    socket.on('offer', ({ offer, to }) => {
+    socket.on('offer', ({ offer, to, meetingId }) => {
       console.log('Offer to:', to);
-      io.to(to).emit('offer', { offer, from: socket.id });
+      io.to(meetingId).emit('offer', { offer, from: socket.id });
     });
 
-    socket.on('answer', ({ answer, to }) => {
+    socket.on('answer', ({ answer, to, meetingId }) => {
       console.log('Answer to:', to);
-      io.to(to).emit('answer', { answer, from: socket.id });
+      io.to(meetingId).emit('answer', { answer, from: socket.id });
     });
   
     socket.on('disconnect', () => {
