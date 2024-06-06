@@ -33,14 +33,17 @@ function initializeSocket(server) {
     });
 
     socket.on('negotiate', ({ peerId }) => {
+      console.log('Negotiate with:', peerId);
       io.to(peerId).emit('negotiate', { peerId: socket.id });
     });
 
     socket.on('offer', ({ offer, to }) => {
+      console.log('Offer to:', to);
       io.to(to).emit('offer', { offer, from: socket.id });
     });
 
     socket.on('answer', ({ answer, to }) => {
+      console.log('Answer to:', to);
       io.to(to).emit('answer', { answer, from: socket.id });
     });
   
