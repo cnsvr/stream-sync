@@ -17,6 +17,15 @@ function initializeSocket(server) {
       socket.leave(meetingId);
     });
 
+
+    socket.on('screenShare', ({ meetingId, peerId }) => {
+      socket.to(meetingId).emit('screenShareStarted', { peerId });
+    });
+
+    socket.on('stopScreenShare', ({ meetingId, peerId }) => {
+      socket.to(meetingId).emit('screenShareStopped', { peerId });
+    });
+
     socket.on('chatMessage', async ({ meetingId, sender, message }) => {
       try {
         const chat = new Chat({
@@ -30,23 +39,7 @@ function initializeSocket(server) {
       } catch (error) {
         console.error('Error saving chat message:', error.message);
       }
-    });
-
-    socket.on('negotiate', ({ peerId, meetingId }) => {
-      console.log('Negotiate with:', peerId);
-      io.to(meetingId).emit('negotiate', { peerId: socket.id });
-    });
-
-    socket.on('offer', ({ offer, to, meetingId }) => {
-      console.log('Offer to:', to);
-      io.to(meetingId).emit('offer', { offer, from: socket.id });
-    });
-
-    socket.on('answer', ({ answer, to, meetingId }) => {
-      console.log('Answer to:', to);
-      io.to(meetingId).emit('answer', { answer, from: socket.id });
-    });
-  
+    });  
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
     });
