@@ -31,6 +31,18 @@ function initializeSocket(server) {
         console.error('Error saving chat message:', error.message);
       }
     });
+
+    socket.on('negotiate', ({ peerId }) => {
+      io.to(peerId).emit('negotiate', { peerId: socket.id });
+    });
+
+    socket.on('offer', ({ offer, to }) => {
+      io.to(to).emit('offer', { offer, from: socket.id });
+    });
+
+    socket.on('answer', ({ answer, to }) => {
+      io.to(to).emit('answer', { answer, from: socket.id });
+    });
   
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
